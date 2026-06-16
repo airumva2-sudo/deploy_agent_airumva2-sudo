@@ -1,6 +1,17 @@
 #!/bin/bash
 
-echo "Enter project name:"
+trap cleanup SIGINT
+
+cleanup() {
+        echo "Interrupt detected. Creating archive."
+        tar -czf "attendance_tracker_${project_name}_archive.tar.gz" "attendance_tracker_${project_name}"
+        rm -rf "attendance_tracker_$project_name"
+        echo "Archive created successfully.Now deleting the incomplete workspace"
+        echo "Incomplete project directory removed."
+        exit 0
+}
+
+echo "Enter the project name:"
 
 read project_name
 if [ -d "attendance_tracker_$project_name" ]; then
@@ -44,15 +55,6 @@ echo "Directory structure validated"
 else
         echo "Warning: Directory structure validation failed"
 fi	
-cleanup() {
-        echo "Interrupt detected. Creating archive."
-        tar -czf "attendance_tracker_{$project_name}_archive.tar.gz" "attendance_tracker_$project_name"
-        rm -rf "attendance_tracker_$project_name"
-        echo "Archive created successfully.Now deleting the incomplete workspace"
-        echo "Incomplete project directory removed."
-        exit 1
-}
-trap cleanup SIGINT
 
 echo "Project setup completed successfully."
 
