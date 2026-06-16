@@ -11,8 +11,6 @@ attendance_tracker_<project_name>/
 
 ├── attendance_checker.py
 
-├── image.png
-
 ├── Helpers/
 
 │ ├── assets.csv
