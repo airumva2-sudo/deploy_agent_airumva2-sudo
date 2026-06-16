@@ -2,7 +2,7 @@
 
 cleanup() {
         echo "Interrupt detected. Creating archive."
-        tar -czf "attendance_tracker_${project_name}_archive.tar.gz" "attendance_tracker_$project_name"
+        tar -czf "attendance_tracker_{$project_name}_archive.tar.gz" "attendance_tracker_$project_name"
         rm -rf "attendance_tracker_$project_name"
         echo "Archive created successfully.Now deleting the incomplete workspace"
         echo "Incomplete project directory removed."
