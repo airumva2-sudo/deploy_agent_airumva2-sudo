@@ -24,4 +24,19 @@ if [[ "$update_thresholds"=~^ [Yy]$ ]]; then
 else
         echo "Now using the default thresholds: warning (75%) and failure (50%)"
 fi
+echo "Checking Python installation."
+if python3 --version >/dev/null 2>&1; then
+        echo "Python3 is installed"
+        python3 --version
+else        
+	echo "Warning: Python3 is not installed"
+fi
+if [ -f "attendance_tracker_$project_name/attendance_checker.py" ] &&
+   [ -f "attendance_tracker_$project_name/Helpers/assets.csv" ] &&
+   [ -f "attendance_tracker_$project_name/Helpers/config.json" ] &&
+   [ -f "attendance_tracker_$project_name/reports/reports.log" ]; then
+echo "Directory structure validated"
+else
+        echo "Warning: Directory structure validation failed"
+fi
 
