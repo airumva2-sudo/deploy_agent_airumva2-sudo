@@ -1,9 +1,21 @@
 #!/bin/bash
 
+cleanup() {
+        echo "Interrupt detected. Creating archive."
+        tar -czf "attendance_tracker_${project_name}_archive.tar.gz" "attendance_tracker_$project_name"
+        rm -rf "attendance_tracker_$project_name"
+        echo "Archive created successfully.Now deleting the incomplete workspace"
+        echo "Incomplete project directory removed."
+        exit 1
+}
+trap cleanup SIGINT
+
 echo "Enter project name:"
+
 read project_name
 if [ -d "attendance_tracker_$project_name" ]; then
 	echo "Directory already exists."
+	exit 1
 fi
 mkdir "attendance_tracker_$project_name"
 echo "Main folder created successfully!"
@@ -14,10 +26,10 @@ echo "Project structure created successfully"
 cp attendance_checker.py "attendance_tracker_$project_name/"
 cp assets.csv "attendance_tracker_$project_name/Helpers/"
 cp config.json "attendance_tracker_$project_name/Helpers/"
-cp repots.log "attendance_tracker_$project_name/repots/"
+cp reports.log "attendance_tracker_$project_name/reports/"
 
 read -p "Do you want to update the attendance thresholds(Y/N)?" update_thresholds
-if [[ "$update_thresholds"=~^ [Yy]$ ]]; then
+if [[ "$update_thresholds"=~ ^[Yy]$ ]]; then
         read -p "Enter warning percentage:" warning_marks
         read -p "Enter failure percentage:" fail_marks
         sed -i "s/\"warning\": *[0-9]*/\"warning\": $warning_marks/" "attendance_tracker_$project_name/Helpers/config.json"
@@ -41,16 +53,7 @@ if [ -f "attendance_tracker_$project_name/attendance_checker.py" ] &&
 echo "Directory structure validated"
 else
         echo "Warning: Directory structure validation failed"
-fi
+fi	
 
-cleanup() {
-        echo "Interrupt detected. Creating archive."
-        tar -czf "attendance_tracker_{$project_name}_archive.tar.gz" "attendance_tracker_$project_name"
-        rm -rf "attendance_tracker_$project_name"
-        echo "Archive created successfully.Now deleting the incomplete workspace"
-        echo "Incomplete project directory removed."
-        exit 1
-}
-trap cleanup SIGINT
 echo "Project setup completed successfully."
 
